@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <main class="about-section">
+    <div class="container">
+          <style>
+            .quickbutton {
+                background-color: #000000;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+
+            input[type=text]
+            {
+                width: 300px;
+                box-sizing: border-box;
+                border: 2px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+                background-color: white;
+                background-image: url('searchicon.png');
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                padding: 12px 20px 12px 40px;
+                -webkit-transition: width 0.4s ease-in-out;
+                transition: width 0.4s ease-in-out;
+            }
+
+            input[type=text]:focus
+            {
+                width: 100%;
+            }
+
+            </style>
+
+        <h2>Search the Username of the Friend You Would Like to Add</h2>
+        <form method="POST" action="addfriend">
+            {{ form.hidden_tag() }}
+
+                <div form class="form-group" align="left">
+                    <input type="text" name="username" placeholder="Search..">
+                </div>
+
+        </form>
+
+
+
+
+    </div>
+  </main>
+{% endblock %}
