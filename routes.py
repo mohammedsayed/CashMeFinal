@@ -68,7 +68,6 @@ def login():
 @app.route("/logout")
 def logout():
   session.pop('email',None)
-  flash('Thanks for joining us')
   return redirect(url_for("index"))
 
 @app.route("/search")
@@ -139,7 +138,11 @@ def payment():
 
 
 
-
+@app.route("/balance")
+def balance():
+    currentUser =  currentUser = User.query.filter_by(email=session["email"]).first()
+    userbal = currentUser.balance
+    return render_template("balance.html",userbal=userbal,curUserName=currentUser.username)
 
 
 
