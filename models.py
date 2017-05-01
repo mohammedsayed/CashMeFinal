@@ -16,6 +16,7 @@ class User(db.Model):
 
 
 
+
     def __init__(self,firstName,lastName,email,username,password):
         self.username = username
         self.firstName = firstName

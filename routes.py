@@ -1,6 +1,6 @@
-from flask import Flask, render_template,request,session,redirect,url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 from models import User,db,Friendship
-from forms import SignupForm,LoginForm,AddFriend
+from forms import *
 from dbsetup import app
 
 
@@ -68,13 +68,25 @@ def login():
 @app.route("/logout")
 def logout():
   session.pop('email',None)
+  flash('Thanks for joining us')
   return redirect(url_for("index"))
 
 @app.route("/search")
 def search():
   if "email" not in session:
     return redirect(url_for("login"))
-  return render_template("search.html")
+  else:
+    friendslist1 = Friendship.query.filter_by(username=session["username"]).all()
+    friendslist2 = Friendship.query.filter_by(friendUserName=session["username"])
+    strFriendList = [""]
+    for friend in friendslist1:
+      strFriendList.append(friend.friendUserName)
+    for friend in friendslist2:
+      strFriendList.append(str(friend.username))
+    form = SelectFriendForm()
+    return render_template("search.html",strFriendList=strFriendList,form=form)
+
+
 
 @app.route("/success")
 def success():
@@ -95,11 +107,37 @@ def addfriend():
         friendship = Friendship(session["username"],usertoadd.username)
         db.session.add(friendship)
         db.session.commit()
-        return redirect(url_for("success"))
+        return redirect(url_for("search"))
       else:
         return redirect(url_for("addfriend"))
   elif request.method == "GET":
     return render_template("addfriend.html", form=form)
+
+
+@app.route("/payment", methods=['GET','POST'])
+def payment():
+    if "email" not in session:
+        return redirect(url_for("login"))
+    form = PaymentForm()
+    if request.method == "POST":
+        if form.validate() == False:
+            session["userToPay"] = request.form.get('friendToPay')
+            return render_template("payment.html", form=form)
+        else:
+            amount = form.paymentAmount.data
+            friendToPay = User.query.filter_by(username=session["userToPay"]).first()
+            currentUser = User.query.filter_by(email=session["email"]).first()
+            if currentUser.balance >= float(amount):
+                currentUser.balance = currentUser.balance - float(amount)
+                friendToPay.balance = friendToPay.balance + float(amount)
+                db.session.commit()
+                flash("Payment Successful!")
+            return render_template("payment.html", form=form)
+    elif request.method == "GET":
+        return render_template("payment.html", form=form)
+
+
+
 
 
 

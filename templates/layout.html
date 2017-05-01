@@ -4,15 +4,64 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet'>
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
   </head>
+  <style>
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #010802;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover {
+        background-color: #7f8678;
+    }
+</style>
   <body>
+    <!--
     <header>
-      <div class="container">
-        <h1 class="title">Ca$h Me</h1>
+      <div class="container" >
+          <div >
+            <h1 class="title">Ca$h Me</h1>
+          </div>
+
       </div>
     </header>
-    
+    -->
+           {% set navigation_bar =
+           [
+                ('/', 'index', 'Index'),
+                ('home', 'home', 'Home'),
+                ('signup', 'signup', 'Sign Up'),
+                ('login', 'login', 'Login'),
+                ('search', 'search', 'Make Payment'),
+                ('addfriend', 'addfriend', 'Add Friend+'),
+                ('logout', 'logout', 'Logout'),
+                ('about', 'about', 'About')
+            ] -%}
+        {% set active_page = active_page|default('index') -%}
+
+        <ul id="navigation">
+            {% for href, id, caption in navigation_bar %}
+              <li {% if id == active_page %} class="active" {% endif %}>
+                  <a href="{{ href|e }}">{{ caption|e }}</a>
+              </li>
+            {% endfor %}
+        </ul>
     {% block content %}
     {% endblock %}
-    
+
   </body>
 </html>

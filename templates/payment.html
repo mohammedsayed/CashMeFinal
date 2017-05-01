@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <main class="container">
+    <div class="container">
+        <h2>Enter Amount in $</h2>
+        <form method="POST" action="payment">
+            {{ form.hidden_tag()}}
+            <div class="form-group">
+                {{ form.paymentAmount.label}}
+
+                {% if form.paymentAmount.errors %}
+                    {% for error in form.paymentAmount.errors  %}
+                        <p class="error-message">{{ error }}}</p>
+                    {% endfor %}
+                {% endif %}
+
+                {{ form.paymentAmount}}
+
+
+
+            </div>
+
+
+        </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    </div>
+  </main>
+{% endblock %}
