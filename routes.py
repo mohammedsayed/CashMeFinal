@@ -140,13 +140,11 @@ def payment():
 
 @app.route("/balance")
 def balance():
+    if "email" not in session:
+        return redirect(url_for("login"))
     currentUser =  currentUser = User.query.filter_by(email=session["email"]).first()
     userbal = currentUser.balance
     return render_template("balance.html",userbal=userbal,curUserName=currentUser.username)
-
-
-
-
 
 
 
